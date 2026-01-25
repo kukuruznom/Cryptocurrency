@@ -1,12 +1,14 @@
 using System.Text.Json;
 using KURS.Models;
+using KURS.Storage;
 
 namespace KURS.Builders
 {
     public static class BlockBuilder
     {
-    public static Block CreateBlock(int index, long timestamp, string previousHash, string[] transactions, int nonce)
+    public static Block CreateBlock(int index, string previousHash, string[] transactions, int nonce, string blockPath)
     {
+        long timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         //guardar un json con las propiedades del bloque en bloques/chain/block_{index}.json
         Block block = new Block
         {
@@ -16,9 +18,7 @@ namespace KURS.Builders
             transactions = transactions,
             nonce = nonce
         };
-        string blockPath = $"C:/Users/Kukuruznom/Desktop/Programas/KURS/bloques/chain/block_{index}.json";
-        string json = JsonSerializer.Serialize(block, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(blockPath, json);
+        BlockStore.SaveBlock(blockPath, block);
         return block;
     }
     }

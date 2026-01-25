@@ -7,19 +7,21 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Iniciando...");
-        ProcessGenesisBlock();
-        ProcessAllBlocks();
-    }
-
-    static void ProcessGenesisBlock()
-    {
-        string GenPath = "C:/Users/Kukuruznom/Desktop/Programas/KURS/bloques/chain/block_0.json";
+        string projectRoot = AppDomain.CurrentDomain.BaseDirectory;
+        projectRoot = Path.GetFullPath(Path.Combine(projectRoot, "..", "..", ".."));
+        string blockPath = Path.Combine(projectRoot, "blockchain");
         string privateKeyHex = "5b123740d619014126bd1263e032545d6eb5b310a374daf45616b37db5ccc29b";
         string publicKeyHex = "047c06b9d0602b41fdfecc5022feb94201c3d222e61916de617b302840fcaf2cd65c518444c239b17c2374d3fda4652479c1c8612eaefbdc48be766bffe8be7d6b";
         
+        Console.WriteLine("Iniciando...");
+        ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
+        int nextIndex = ProcessAllBlocks(blockPath, publicKeyHex);
+    }
+
+    static void ProcessGenesisBlock(string blockPath, string privateKeyHex, string publicKeyHex)
+    {
         // Leer bloque
-        Block? block = BlockStore.LoadBlock(GenPath);
+        Block? block = BlockStore.LoadBlock(Path.Combine(blockPath, "block_0.json"));
         if (block == null)
         {
             Console.WriteLine("Error al leer el bloque genesis");
@@ -37,18 +39,14 @@ class Program
         Console.WriteLine($"Firma válida: {isSignatureValid}");
 
         // Guardar bloque
-        BlockStore.SaveBlock(GenPath, block);
+        BlockStore.SaveBlock(Path.Combine(blockPath, "block_0.json"), block);
 
     }
-    static void ProcessAllBlocks()
+    static int ProcessAllBlocks(string blockPath, string publicKeyHex)
     {
-        long Timestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
         int index = 0;
-        string PreviusHash = "";
-        string blocksDirectory = "C:/Users/Kukuruznom/Desktop/Programas/KURS/bloques/chain/";
-        string publicKeyHex = "047c06b9d0602b41fdfecc5022feb94201c3d222e61916de617b302840fcaf2cd65c518444c239b17c2374d3fda4652479c1c8612eaefbdc48be766bffe8be7d6b";
         //listar todos los archivos json en el directorio
-        string[] blockFiles = Directory.GetFiles(blocksDirectory, "*.json");
+        string[] blockFiles = Directory.GetFiles(blockPath, "*.json");
         foreach (string blockFile in blockFiles)
         {
             Block? block = BlockStore.LoadBlock(blockFile);
@@ -65,26 +63,25 @@ class Program
                 if (block.hash != calculatedHash)
                 {
                 Console.WriteLine($"Hash inválido en el bloque: {blockFile}");
-                return;
+                return index;
                 }
-                PreviusHash = block.hash;
                 //verificar firma
                 bool isSignatureValid = BlockSigner.VerifySignature(publicKeyHex, block.hash, block.firma);
                 if (!isSignatureValid)
                 {
                     Console.WriteLine($"Firma invalida en el bloque:{blockFile}");
-                    return;
+                    return index;
                 }
                 Console.WriteLine($"Bloque verificado correctamente: {blockFile}");
                 index++;
-
             }
         }
         Console.WriteLine("Comenzando desde el ultimo bloque correcto...");
+        return index;
     }
-    static void CreateNewBlock(int index, long timestamp, string PreviusHash, string[] transactions, int nonce)
+    static void CreateNewBlock(int index, string previousHash, string[] transactions, int nonce, string blockPath)
     {
-        Block newBlock = BlockBuilder.CreateBlock(index, timestamp, PreviusHash, transactions, nonce);
+        Block newBlock = BlockBuilder.CreateBlock(index, previousHash, transactions, nonce, Path.Combine(blockPath, $"block_{index}.json"));
         Console.WriteLine($"Nuevo bloque creado: Índice {newBlock.index}, Timestamp {newBlock.timestamp}");
     }
 }

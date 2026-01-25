@@ -3,9 +3,9 @@ using KURS.Builders;
 namespace KURS.MintBurn;
 public class Mint()
 {
-    public static void mint(int amount, string toAddress)
+    public static void mint(int amount, int index, string toAddress)
     {
-        Console.WriteLine($"Minting {amount} tokens to address {toAddress}.");
-        // Lógica para acuñar tokens
+        string transaction = $"MINT {amount} TO {toAddress}";
+        BlockBuilder.CreateBlock(index, "", [transaction], 0, "bloques/chain");
     }
 }
