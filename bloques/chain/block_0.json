@@ -1,0 +1,12 @@
+{
+  "index": 0,
+  "timestamp": 1736180000,
+  "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "transactions": [
+    "this is this end",
+    "hold your bread and count to ten"
+  ],
+  "nonce": 0,
+  "hash": "0a1675d87b5ec2ca72a3c2eaf7ac86a6cb9e3dc390ca37eb809d427662dd6cdd",
+  "firma": "304402207203708accc6c6b4b37ed7975e0fb3fe09a83190c05883a0334f53c2bf2a3a9c02202dce2712eb0ba14bc6870b006a91af0e8686086b12aa0e178853ac4ad8b867af"
+}

@@ -1,0 +1,41 @@
+# ======================
+# .NET
+# ======================
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+__pycache__/
+*.pyc
+*.key
+*.pem
+*.seed
+*priv*
+*secret*
+clave_privada.txt
+clave_publica.txt
+
+# ======================
+# Logs & temp
+# ======================
+*.log
+
+# ======================
+# OS
+# ======================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
