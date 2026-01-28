@@ -9,13 +9,13 @@ ECDSA cryptography and complete chain validation.
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Examples](#examples)
-- [Security](#security)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Quick Start](#-quick-start)
+- [Examples](#-examples)
+- [Security](#-security)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
 
 ## ✨ Features
 
