@@ -2,6 +2,8 @@
 using KURS.Storage;
 using KURS.Crypto;
 using KURS.Builders;
+using KURS.Functions;
+using Microsoft.VisualBasic;
 
 class Program
 {
@@ -15,7 +17,12 @@ class Program
         
         Console.WriteLine("Iniciando...");
         ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
-        int nextIndex = ProcessAllBlocks(blockPath, publicKeyHex);
+        ProcessAllBlocks(blockPath, publicKeyHex);
+        Function.Burn(100, "5462asd6f", blockPath);
+    }
+    static void Loop(Strings[] args)
+    {
+
     }
 
     static void ProcessGenesisBlock(string blockPath, string privateKeyHex, string publicKeyHex)
@@ -42,9 +49,8 @@ class Program
         BlockStore.SaveBlock(Path.Combine(blockPath, "block_0.json"), block);
 
     }
-    static int ProcessAllBlocks(string blockPath, string publicKeyHex)
+    static void ProcessAllBlocks(string blockPath, string publicKeyHex)
     {
-        int index = 0;
         //listar todos los archivos json en el directorio
         string[] blockFiles = Directory.GetFiles(blockPath, "*.json");
         foreach (string blockFile in blockFiles)
@@ -63,25 +69,20 @@ class Program
                 if (block.hash != calculatedHash)
                 {
                 Console.WriteLine($"Hash inválido en el bloque: {blockFile}");
-                return index;
+                return;
                 }
                 //verificar firma
                 bool isSignatureValid = BlockSigner.VerifySignature(publicKeyHex, block.hash, block.firma);
                 if (!isSignatureValid)
                 {
                     Console.WriteLine($"Firma invalida en el bloque:{blockFile}");
-                    return index;
+                    return;
                 }
                 Console.WriteLine($"Bloque verificado correctamente: {blockFile}");
-                index++;
+               
             }
         }
         Console.WriteLine("Comenzando desde el ultimo bloque correcto...");
-        return index;
-    }
-    static void CreateNewBlock(int index, string previousHash, string[] transactions, int nonce, string blockPath)
-    {
-        Block newBlock = BlockBuilder.CreateBlock(index, previousHash, transactions, nonce, Path.Combine(blockPath, $"block_{index}.json"));
-        Console.WriteLine($"Nuevo bloque creado: Índice {newBlock.index}, Timestamp {newBlock.timestamp}");
+        return;
     }
 }
