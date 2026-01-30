@@ -130,7 +130,7 @@ Each block is validated through:
 - [x] Basic blockchain
 - [x] Block hashing
 - [x] ECDSA digital signatures
-- [ ] Mint & Burn
+- [x] Mint & Burn
 - [ ] UTXO Model
 - [ ] REST API
 - [ ] Mempool

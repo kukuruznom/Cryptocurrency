@@ -18,7 +18,13 @@ class Program
         Console.WriteLine("Iniciando...");
         ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
         ProcessAllBlocks(blockPath, publicKeyHex);
+        /*Function.Mint(1000, "5462asd6f", blockPath);
         Function.Burn(100, "5462asd6f", blockPath);
+        Function.Burn(100, "5462asd6f", blockPath);
+        Function.Mint(100, "8545", blockPath);
+        Function.Burn(100, "5462asd6f", blockPath);
+        Function.Transfer(100, "5462asd6f", "8545", blockPath);*/
+        Function.utxo("kukuruznom", blockPath);
     }
     static void Loop(Strings[] args)
     {
