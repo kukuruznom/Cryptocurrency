@@ -1,4 +1,4 @@
-# KURS - Stablecoin Blockchain
+# Stablecoin Blockchain
 
 [![Status](https://img.shields.io/badge/Status-Under%20Development-yellow)]()
 [![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)]()
@@ -131,7 +131,7 @@ Each block is validated through:
 - [x] Block hashing
 - [x] ECDSA digital signatures
 - [x] Mint & Burn
-- [ ] UTXO Model
+- [x] UTXO Model
 - [ ] REST API
 - [ ] Mempool
 - [ ] Wallet
@@ -159,7 +159,3 @@ MIT License - see [LICENSE](LICENSE)
 
 **kukuruznom**  
 GitHub: [@kukuruznom](https://github.com/kukuruznom)
-
----
-
-**Last updated**: January 2026
