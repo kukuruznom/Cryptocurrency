@@ -2,7 +2,7 @@
 using KURS.Storage;
 using KURS.Crypto;
 using KURS.Builders;
-using KURS.Functions;
+using KURS.Function;
 using Microsoft.VisualBasic;
 
 class Program
@@ -18,19 +18,12 @@ class Program
         Console.WriteLine("Iniciando...");
         ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
         ProcessAllBlocks(blockPath, publicKeyHex);
-        /*Function.Mint(1000, "5462asd6f", blockPath);
-        Function.Burn(100, "5462asd6f", blockPath);
-        Function.Burn(100, "5462asd6f", blockPath);
-        Function.Mint(100, "8545", blockPath);
-        Function.Burn(100, "5462asd6f", blockPath);
-        Function.Transfer(100, "5462asd6f", "8545", blockPath);*/
-        Function.utxo("kukuruznom", blockPath);
+        commandLoop(blockPath);
     }
-    static void Loop(Strings[] args)
+    static void commandLoop(string blockPath)
     {
-
+        Commands.Loop(blockPath);
     }
-
     static void ProcessGenesisBlock(string blockPath, string privateKeyHex, string publicKeyHex)
     {
         // Leer bloque
