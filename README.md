@@ -20,12 +20,15 @@ ECDSA cryptography and complete chain validation.
 ## ✨ Features
 
 - ✅ Blockchain with SHA256 + ECDSA validation
-- ✅ Automated Genesis Block
-- ✅ Transactions with digital signature
-- ✅ Mint & Burn tokens
-- ✅ JSON persistence
-- ✅ Compatible with any OS (Windows, Linux, Mac)
+- ✅ Automated Genesis Block with signature
+- ✅ Transactions with digital signatures
+- ✅ Mint & Burn token operations
+- ✅ JSON persistence for blocks
+- ✅ Interactive command shell (KURS_$> prompt)
+- ✅ Signature verification for all blocks
+- ✅ Compatible with Windows, Linux, and Mac
 - ✅ Relative paths for portability
+- ✅ Python utilities for key generation
 
 ## 📁 Project Structure
 
@@ -33,19 +36,27 @@ ECDSA cryptography and complete chain validation.
 KURS/
 ├── Program.cs                  # Entry point and orchestration
 ├── Models/
-│   └── Block.cs               # Block data structure
+│   └── Block.cs               # Block data structure (index, timestamp, previousHash, transactions, nonce, hash, firma)
 ├── Crypto/
 │   ├── BlockHasher.cs         # SHA256 hash calculation
-│   ├── BlockSigner.cs         # ECDSA signing and verification
-│   └── TransactionSigner.cs   # Transaction signing
+│   └── BlockSigner.cs         # ECDSA signing and verification
 ├── Storage/
-│   └── BlockStore.cs          # JSON persistence
+│   └── BlockStore.cs          # JSON persistence and block loading
 ├── Builders/
-│   └── BlockBuilder.cs        # Block creation
-├── Mint-Burn/
-│   └── MintBurn.cs            # Minting and burning logic
+│   └── BlockBuilder.cs        # Block creation utilities
+├── Conosole/
+│   └── Commands.cs            # Interactive command shell (shell v1.0)
+├── Comands/
+│   └── Functions.cs           # Command handlers
+├── Api/
+│   └── api.cs                 # API functionality
+├── Balance/
+│   └── Balance handling       # Token balance management
 ├── Utils/
-│   └── Hex.cs                 # Conversion utilities
+│   └── Hex.cs                 # Hexadecimal conversion utilities
+├── pythonutils/
+│   ├── claveecsdagen.py       # Key generation utilities
+│   └── verfirm.py             # Signature verification
 └── blockchain/                # Block storage
     └── block_0.json           # Genesis block
 ```
@@ -81,19 +92,30 @@ Comenzando desde el ultimo bloque correcto...
 
 ## 📝 Examples
 
-### Process genesis block
+### Start the blockchain application
+```bash
+dotnet run
+```
+
+### Interactive commands
+Once running, use the blockchain shell:
+```
+KURS_$> help          # List all available commands
+KURS_$> mint <amount> <address>  # Mint new tokens
+KURS_$> burn <amount>  # Burn tokens
+KURS_$> exit          # Exit the application
+```
+
+### Programmatic usage
 ```csharp
+// Process genesis block with signature validation
 ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
-```
 
-### Validate complete chain
-```csharp
-int nextIndex = ProcessAllBlocks(blockPath, publicKeyHex);
-```
+// Validate complete blockchain
+ProcessAllBlocks(blockPath, publicKeyHex);
 
-### Create new block
-```csharp
-CreateNewBlock(index, previousHash, transactions, nonce, blockPath);
+// Start interactive shell
+await Commands.Loop(blockPath);
 ```
 
 ## 🔐 Security
@@ -101,9 +123,17 @@ CreateNewBlock(index, previousHash, transactions, nonce, blockPath);
 ### Block Validation
 
 Each block is validated through:
-- **SHA256 Hash** - Integrity verification
-- **ECDSA Signature** - Chain authenticity
-- **Chaining** - Validation of `previousHash`
+- **SHA256 Hash** - Integrity verification of block data (index, timestamp, previousHash, transactions, nonce)
+- **ECDSA Signature** - Block authenticity using private/public key pairs
+- **Signature Verification** - All blocks must have valid ECDSA signatures before acceptance
+- **Block Chaining** - Validation of `previousHash` field for continuity
+
+### Cryptographic Implementation
+
+- **Hash Algorithm**: SHA256 for block hashing
+- **Signature Scheme**: ECDSA (Elliptic Curve Digital Signature Algorithm)
+- **Key Generation**: Done via Python utilities in `pythonutils/` directory
+- **Signature Format**: DER encoded
 
 ### Block Structure
 
@@ -114,8 +144,8 @@ Each block is validated through:
   "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
   "transactions": ["MINT 1000 TO address1"],
   "nonce": 0,
-  "hash": "ee18103e7d53ea9d91566e49a612e937ee6439c78a2b3fc8309f43de390ffcad",
-  "firma": "304402203289...c5ec97"
+  "hash": "sha256_block_hash_here",
+  "firma": "ecdsa_signature_here"
 }
 ```
 
@@ -127,15 +157,19 @@ Each block is validated through:
 
 ## 🛣️ Roadmap
 
-- [x] Basic blockchain
-- [x] Block hashing
+- [x] Basic blockchain with block structure
+- [x] Block hashing (SHA256)
 - [x] ECDSA digital signatures
-- [x] Mint & Burn
-- [x] UTXO Model
-- [ ] REST API
-- [ ] Mempool
-- [ ] Wallet
-- [ ] Distributed consensus
+- [x] Signature verification
+- [x] Mint & Burn token operations
+- [x] Interactive command shell
+- [x] JSON block persistence
+- [x] Cross-platform support
+- [ ] Complete REST API
+- [ ] Mempool/Transaction pool
+- [ ] Multi-signature support
+- [ ] Performance optimization
+- [ ] Distributed consensus mechanism
 
 ## 🤝 Contributing
 

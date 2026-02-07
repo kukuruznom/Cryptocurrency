@@ -1,28 +1,28 @@
 ﻿using KURS.Models;
 using KURS.Storage;
 using KURS.Crypto;
-using KURS.Builders;
-using KURS.Function;
-using Microsoft.VisualBasic;
+using KURS.Api;
+
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         string projectRoot = AppDomain.CurrentDomain.BaseDirectory;
         projectRoot = Path.GetFullPath(Path.Combine(projectRoot, "..", "..", ".."));
         string blockPath = Path.Combine(projectRoot, "blockchain");
+        //string blockPath = "blockchain";
         string privateKeyHex = "5b123740d619014126bd1263e032545d6eb5b310a374daf45616b37db5ccc29b";
         string publicKeyHex = "047c06b9d0602b41fdfecc5022feb94201c3d222e61916de617b302840fcaf2cd65c518444c239b17c2374d3fda4652479c1c8612eaefbdc48be766bffe8be7d6b";
         
         Console.WriteLine("Iniciando...");
         ProcessGenesisBlock(blockPath, privateKeyHex, publicKeyHex);
         ProcessAllBlocks(blockPath, publicKeyHex);
-        commandLoop(blockPath);
+        await commandLoop(blockPath);
     }
-    static void commandLoop(string blockPath)
+    static async Task commandLoop(string blockPath)
     {
-        Commands.Loop(blockPath);
+        await Commands.Loop(blockPath);
     }
     static void ProcessGenesisBlock(string blockPath, string privateKeyHex, string publicKeyHex)
     {

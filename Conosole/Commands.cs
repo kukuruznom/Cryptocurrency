@@ -1,8 +1,10 @@
 using KURS.Function;
+using KURS.Api;
+using System.Threading.Tasks;
 
 class Commands
 {
-    public static void Loop(string blockPath)
+    public static async Task Loop(string blockPath)
     {
          Console.WriteLine("Blockchain Shell v1.0. write \"help\" for commands");
                 while(true)
@@ -60,6 +62,31 @@ class Commands
                         Function.utxo(parts[1], blockPath);
                         
                         break;
+                    case "api":
+                        if (parts.Length != 2 && parts.Length != 3)
+                        {
+                            Console.WriteLine("Usage: api <start|stop>");
+                            break;
+                        }
+                        if (parts[1].ToLower() == "start")
+                        {
+                            string port = "8080"; // Default port
+                            if (parts.Length > 2)
+                            {
+                                port = parts[2];
+                            }
+                            Api.Start(blockPath, port);
+                        }
+                        else if (parts[1].ToLower() == "stop")
+                        {
+                            await Api.Stop();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Usage: api <start|stop> [optional_port]");
+                        }
+                        break;
+
                     default:
                         Console.WriteLine("Unknown command. Type 'help' for a list of commands.");
                     break;
@@ -71,6 +98,26 @@ class Commands
                 Console.WriteLine($"Error executing command: {ex.Message}");
             }
             
+        }
+    }
+        public static string ApiC(string type, int ammount, string address,string toAddress, string blockPath)
+    {            
+        switch(type)
+        {
+            case "transfer":
+            try
+            {
+                string result = Function.Transfer(ammount, address, toAddress, blockPath);
+                return result;
+            }
+            catch (Exception ex)            {
+                return $"Error executing transfer: {ex.Message}";
+            }
+            case "utxo":
+                int utxo =Function.GetBalance(address, blockPath);
+                return utxo.ToString();
+            default:
+                return "Unknown API command";
         }
     }
 }

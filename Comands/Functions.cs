@@ -14,6 +14,8 @@ public class Function
         Console.WriteLine("burn <amount> <fromAddress> - Burn coins from the specified address");
         Console.WriteLine("transfer <amount> <fromAddress> <toAddress> - Transfer coins from one address to another");
         Console.WriteLine("utxo <address|all> - Show UTXO for the specified address or all addresses");
+        Console.WriteLine("Api <start|stop> - Start or stop the API server");
+        Console.WriteLine("exit - Exit the command loop");
     }
 
     public static void Mint(int amount, string toAddress, string blockPath)
@@ -31,38 +33,40 @@ public class Function
         string[] transaction = {amount.ToString(), fromAddress, "burn"};
         BlockBuilder.CreateBlock(transaction, 0, blockPath);
     }
-    public static void Transfer(int amount , string fromAddress, string toAddress, string blockPath)
+    public static string Transfer(int amount , string fromAddress, string toAddress, string blockPath)
     {
         if (fromAddress == toAddress)
         {
             Console.WriteLine("Error: fromAddress and toAddress cannot be the same.");
-            return;
+            return "Error: fromAddress and toAddress cannot be the same.";
+
         }
         else if (amount <= 0)
         {
             Console.WriteLine("Error: amount must be greater than zero.");
-            return;
+            return "Error: amount must be greater than zero.";
         }
         else if (string.IsNullOrWhiteSpace(fromAddress) || string.IsNullOrWhiteSpace(toAddress))
         {
             Console.WriteLine("Error: fromAddress and toAddress cannot be empty.");
-            return;
+            return "Error: fromAddress and toAddress cannot be empty.";
         }
         else if (GetBalance(fromAddress, blockPath) < amount)
         {
             Console.WriteLine("Error: insufficient funds for the transfer.");
-            return;
+            return "Error: insufficient funds for the transfer."    ;
         }
         string[] transaction = {amount.ToString(), fromAddress, toAddress, "transfer"};
         BlockBuilder.CreateBlock(transaction, 0, blockPath);
+        return "Transfer executed successfully";
     }
-public static void utxo(string address, string blockPath)
+public static string utxo(string address, string blockPath)
 {
     int balance = GetBalance(address, blockPath);
     if (address == "all")
-        Console.WriteLine($"Total de monedas en circulación: {balance}");
+        return $"Total de monedas en circulación: {balance}";
     else
-        Console.WriteLine($"Balance de la dirección {address}: {balance}");
+        return $"Balance de la dirección {address}: {balance}";
 }
 public static int GetBalance(string targetAddress, string blockPath)
 {
